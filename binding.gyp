@@ -7,17 +7,15 @@
       "cflags_cc!": [ "-fno-exceptions", "-fno-rtti" ],
       "link_settings": {
           "libraries": [
-              "../rust_native_storage_library/target/debug/librust_native_storage_library.a",
-              "/usr/local/lib/libwasmedge-tensorflow_c.so",
-              "/usr/local/lib/libwasmedge-tensorflowlite_c.so",
-              "/usr/local/lib/libwasmedge-image_c.so",
-              "/usr/local/lib/libwasmedge-storage_c.so",
-              "/usr/local/lib/libwasmedge_c.so",
-              "/usr/local/lib/libtensorflow.so",
-              "/usr/local/lib/libtensorflow_framework.so",
-              "/usr/local/lib/libtensorflowlite_c.so",
-              "-ljpeg",
-              "-lpng",
+              "$(HOME)/.wasmedge/lib/libwasmedge-tensorflow_c.so",
+              "$(HOME)/.wasmedge/lib/libwasmedge-tensorflowlite_c.so",
+              "$(HOME)/.wasmedge/lib/libwasmedge-image_c.so",
+              "$(HOME)/.wasmedge/lib/libwasmedge_c.so",
+              "$(HOME)/.wasmedge/lib/libtensorflow.so",
+              "$(HOME)/.wasmedge/lib/libtensorflow_framework.so",
+              "$(HOME)/.wasmedge/lib/libtensorflowlite_c.so",
+              "$(HOME)/.wasmedge/lib/libjpeg.so",
+              "$(HOME)/.wasmedge/lib/libpng.so",
           ]
       },
       "sources": [
@@ -30,7 +28,7 @@
       "include_dirs": [
         "<!@(node -p \"require('node-addon-api').include\")",
         "wasmedge-core/src",
-        "/usr/local/include",
+        "$(HOME)/.wasmedge/include",
       ],
       'defines': [ 'NAPI_DISABLE_CPP_EXCEPTIONS' ],
     },
