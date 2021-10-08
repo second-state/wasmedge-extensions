@@ -1,9 +1,9 @@
-./preinstall.sh
-CXX=g++-9 node-pre-gyp install --fallback-to-build --update-binary
-rm -rf tmp/ssvm-extensions
-mkdir -p tmp/ssvm-extensions
-cp build/Release/ssvm-extensions.node tmp/ssvm-extensions
-strip tmp/ssvm-extensions/ssvm-extensions.node
-cd tmp/
-tar zcvf ../ssvm-extensions-linux-x64.tar.gz ssvm-extensions
-cd ../
+#!/usr/bin/env bash
+ARCH=$(node -e 'console.log(process.arch)')
+MODULE_NAME=wasmedge-extensions
+npm run release
+rm -rf $MODULE_NAME
+mkdir $MODULE_NAME
+cp build/Release/$MODULE_NAME.node $MODULE_NAME
+strip $MODULE_NAME/$MODULE_NAME.node
+tar zcvf $MODULE_NAME-linux-${ARCH}.tar.gz $MODULE_NAME

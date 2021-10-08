@@ -1,6 +1,6 @@
 {
   "name": "wasmedge-extensions",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Second State WebAssembly VM for Node.js Addon with all extensions",
   "keywords": [
     "wasm",
@@ -23,8 +23,8 @@
     "package_name": "{module_name}-{platform}-{arch}.tar.gz"
   },
   "dependencies": {
-    "node-addon-api": "^3.0.0",
     "@mapbox/node-pre-gyp": "^1.0.0",
+    "node-addon-api": "^3.0.0",
     "npm": "^7.11.1"
   },
   "devDependencies": {
@@ -33,6 +33,7 @@
   },
   "scripts": {
     "preinstall": "./scripts/preinstall.sh",
-    "install": "node-pre-gyp install --fallback-to-build"
+    "install": "node-pre-gyp install --fallback-to-build",
+    "release": "node-pre-gyp install --fallback-to-build --update-binary"
   }
 }
