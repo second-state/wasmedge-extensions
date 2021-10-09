@@ -16,7 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: wasmedge/wasmedge:ubuntu2004_x86_64
-
     strategy:
       matrix:
         wasmedge-options: ['', '--enable-aot']
@@ -47,7 +46,9 @@ jobs:
     - name: Install dependencies
       run: |
         apt update && apt install -y libclang-dev sudo
-        npm install -g --unsafe-perm rustwasmc
+        npm install --unsafe-perm -g rustwasmc
+        ln -s $(which node) /usr/local/bin/node
+        ln -s $(which npm) /usr/local/bin/npm
 
     - name: Build and install wasmedge-extensions
       uses: './wasmedge-core/.github/actions/build-from-source'
@@ -55,7 +56,7 @@ jobs:
     - name: Test functions ${{ matrix.wasmedge-options }}
       run: |
         rustwasmc build ${{ matrix.wasmedge-options }} --enable-ext
-        cd pkg && npm i ${GITHUB_WORKSPACE} && cd ..
+        cd pkg && sudo npm i ${GITHUB_WORKSPACE} && cd ..
         node node/app.js
         rustwasmc clean
       working-directory: wasm-learning/nodejs/functions
@@ -63,7 +64,7 @@ jobs:
     - name: Test JSON IO ${{ matrix.wasmedge-options }}
       run: |
         rustwasmc build ${{ matrix.wasmedge-options }} --enable-ext
-        cd pkg && npm i ${GITHUB_WORKSPACE} && cd ..
+        cd pkg && sudo npm i ${GITHUB_WORKSPACE} && cd ..
         node node/app.js
         rustwasmc clean
       working-directory: wasm-learning/nodejs/json_io
@@ -71,7 +72,7 @@ jobs:
     - name: Test WASI ${{ matrix.wasmedge-options }}
       run: |
         rustwasmc build ${{ matrix.wasmedge-options }} --enable-ext
-        cd pkg && npm i ${GITHUB_WORKSPACE} && cd ..
+        cd pkg && sudo npm i ${GITHUB_WORKSPACE} && cd ..
         node node/app.js
         rustwasmc clean
       working-directory: wasm-learning/nodejs/wasi
@@ -80,7 +81,7 @@ jobs:
       if: ${{ contains(matrix.wasmedge-options, 'aot') }}
       run: |
         rustwasmc build ${{ matrix.wasmedge-options }} --enable-ext
-        cd pkg && npm i ${GITHUB_WORKSPACE} && cd ..
+        cd pkg && sudo npm i ${GITHUB_WORKSPACE} && cd ..
         cd node && node app.js && cd ..
         rustwasmc clean
       working-directory: wasm-learning/nodejs/kmeans
@@ -89,7 +90,7 @@ jobs:
       if: ${{ contains(matrix.wasmedge-options, 'aot') }}
       run: |
         rustwasmc build ${{ matrix.wasmedge-options }} --enable-ext
-        cd pkg && npm i ${GITHUB_WORKSPACE} && cd ..
+        cd pkg && sudo npm i ${GITHUB_WORKSPACE} && cd ..
         cd test && node test.js && cd ..
         rustwasmc clean
       working-directory: wasm-learning/faas/mobilenet
@@ -98,7 +99,7 @@ jobs:
       if: ${{ contains(matrix.wasmedge-options, 'aot') }}
       run: |
         rustwasmc build ${{ matrix.wasmedge-options }} --enable-ext
-        cd pkg && npm i ${GITHUB_WORKSPACE} && cd ..
+        cd pkg && sudo npm i ${GITHUB_WORKSPACE} && cd ..
         cd test && node test.js && cd ..
         rustwasmc clean
       working-directory: wasm-learning/faas/mtcnn
