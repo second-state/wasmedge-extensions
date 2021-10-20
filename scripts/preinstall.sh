@@ -2,6 +2,8 @@
 
 set -e
 
+git submodule update --init --recursive
+
 INSTALL_SCRIPT_URL="https://raw.githubusercontent.com/WasmEdge/WasmEdge/master/utils/install.sh"
 UNINSTALL_SCRIPT_URL="https://raw.githubusercontent.com/WasmEdge/WasmEdge/master/utils/uninstall.sh"
 INSTALL_SCRIPT_PATH=/tmp/install_wasmedge.sh
