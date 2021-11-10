@@ -1,3 +1,0 @@
-[submodule "wasmedge-core"]
-	path = wasmedge-core
-	url = https://github.com/second-state/wasmedge-core.git

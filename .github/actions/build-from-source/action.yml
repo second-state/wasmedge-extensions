@@ -1,0 +1,19 @@
+name: Build wasmedge-extensions
+
+inputs:
+  cc:
+    default: 'gcc'
+  cxx:
+    default: 'g++'
+  path:
+    default: '.'
+
+runs:
+  using: 'composite'
+  steps:
+  - shell: bash
+    env:
+      CC: ${{ inputs.cc }}
+      CXX: ${{ inputs.cxx }}
+    run: |
+      JOBS=max npm install --build-from-source --unsafe-perm ${{ inputs.path }}

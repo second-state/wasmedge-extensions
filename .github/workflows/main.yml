@@ -51,7 +51,7 @@ jobs:
         npm install --unsafe-perm -g rustwasmc
 
     - name: Build wasmedge-core with ${{ matrix.cc }}
-      uses: './wasmedge-core/.github/actions/build-from-source'
+      uses: './.github/actions/build-from-source'
       with:
         cc: ${{ matrix.cc }}
         cxx: ${{ matrix.cxx }}
