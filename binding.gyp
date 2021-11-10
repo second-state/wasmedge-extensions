@@ -17,15 +17,15 @@
           ]
       },
       "sources": [
-        "wasmedgeaddon.cc",
-        "wasmedge-core/src/addon.cc",
-        "wasmedge-core/src/bytecode.cc",
-        "wasmedge-core/src/options.cc",
-        "wasmedge-core/src/utils.cc",
+        "src/wasmedgeaddon.cc",
+        "src/addon.cc",
+        "src/bytecode.cc",
+        "src/options.cc",
+        "src/utils.cc",
       ],
       "include_dirs": [
         "<!@(node -p \"require('node-addon-api').include\")",
-        "wasmedge-core/src",
+        "src",
         "$(HOME)/.wasmedge/include",
       ],
       'defines': [ 'NAPI_DISABLE_CPP_EXCEPTIONS' ],

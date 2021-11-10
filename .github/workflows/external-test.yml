@@ -49,7 +49,7 @@ jobs:
         npm install --unsafe-perm -g rustwasmc
 
     - name: Build and install wasmedge-extensions
-      uses: './wasmedge-core/.github/actions/build-from-source'
+      uses: './.github/actions/build-from-source'
 
     - name: Test functions ${{ matrix.rustwasmc-options }}
       run: |
