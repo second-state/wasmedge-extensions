@@ -1,10 +1,10 @@
 #include "wasmedgeaddon.h"
 
 #include <limits>
-#include <wasmedge.h>
-#include <wasmedge-tensorflow.h>
-#include <wasmedge-tensorflowlite.h>
-#include <wasmedge-image.h>
+#include <wasmedge/wasmedge.h>
+#include <wasmedge/wasmedge-tensorflow.h>
+#include <wasmedge/wasmedge-tensorflowlite.h>
+#include <wasmedge/wasmedge-image.h>
 
 #include <boost/functional/hash.hpp>
 #include <iostream>

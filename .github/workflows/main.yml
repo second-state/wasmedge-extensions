@@ -3,17 +3,16 @@ name: Main Workflow
 on:
   push:
     branches:
-    - master
+      - master
+      - '**/test**'
+    tags:
+      - '*'
   pull_request:
     branches:
-    - master
+      - master
 
 jobs:
   build_and_test:
-    runs-on: ubuntu-latest
-    container:
-      image: wasmedge/wasmedge:ubuntu2004_x86_64
-
     strategy:
       matrix:
         include:
@@ -21,11 +20,20 @@ jobs:
           cxx: 'clang++'
         - cc: 'gcc'
           cxx: 'g++'
+    name: Build & test wasmedge-extensions
+    runs-on: ubuntu-latest
+    container:
+      image: wasmedge/wasmedge:ubuntu2004_x86_64
 
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
+
+    - name: Install clang
+      if: ${{ contains(matrix.cc, 'clang') }}
+      run: |
+        apt update && apt install -y clang
 
     - name: Setup Node.js
       uses: actions/setup-node@v2
@@ -40,13 +48,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        apt update && apt install -y libclang-dev sudo
-        npm install -g --unsafe-perm rustwasmc
-
-    - name: Install clang if needed
-      if: ${{ contains(matrix.cc, 'clang') }}
-      run: |
-        apt update && apt install -y clang
+        npm install --unsafe-perm -g rustwasmc
 
     - name: Build wasmedge-core with ${{ matrix.cc }}
       uses: './wasmedge-core/.github/actions/build-from-source'

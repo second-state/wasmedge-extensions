@@ -3,13 +3,13 @@ name: External Test
 on:
   push:
     branches:
-    - master
+      - master
+      - '**/test**'
     tags:
-    - '[0-9]+.[0-9]+.[0-9]+'
+      - '*'
   pull_request:
     branches:
-    - master
-
+      - master
 
 jobs:
   test_wasm_learning:
@@ -18,7 +18,8 @@ jobs:
       image: wasmedge/wasmedge:ubuntu2004_x86_64
     strategy:
       matrix:
-        wasmedge-options: ['', '--enable-aot']
+        node-version: [12.x, 14.x, 16.x]
+        rustwasmc-options: ['', '--enable-aot']
 
     steps:
     - uses: actions/checkout@v2
@@ -32,10 +33,10 @@ jobs:
         path: wasm-learning
         ref: wasmedge-test
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
       with:
-        node-version: '14'
+        node-version: ${{ matrix.node-version }}
 
     - name: Set Rust to required version
       uses: actions-rs/toolchain@v1
@@ -45,61 +46,64 @@ jobs:
 
     - name: Install dependencies
       run: |
-        apt update && apt install -y libclang-dev sudo
         npm install --unsafe-perm -g rustwasmc
-        ln -s $(which node) /usr/local/bin/node
-        ln -s $(which npm) /usr/local/bin/npm
 
     - name: Build and install wasmedge-extensions
       uses: './wasmedge-core/.github/actions/build-from-source'
 
-    - name: Test functions ${{ matrix.wasmedge-options }}
+    - name: Test functions ${{ matrix.rustwasmc-options }}
       run: |
-        rustwasmc build ${{ matrix.wasmedge-options }} --enable-ext
-        cd pkg && sudo npm i ${GITHUB_WORKSPACE} && cd ..
-        node node/app.js
+        rustwasmc build ${{ matrix.rustwasmc-options }} --enable-ext
+        cd pkg && npm install --unsafe-perm ${GITHUB_WORKSPACE} && cd ..
+        . $HOME/.wasmedge/env && node node/app.js
         rustwasmc clean
       working-directory: wasm-learning/nodejs/functions
 
-    - name: Test JSON IO ${{ matrix.wasmedge-options }}
+    - name: Test JSON IO ${{ matrix.rustwasmc-options }}
       run: |
-        rustwasmc build ${{ matrix.wasmedge-options }} --enable-ext
-        cd pkg && sudo npm i ${GITHUB_WORKSPACE} && cd ..
-        node node/app.js
+        rustwasmc build ${{ matrix.rustwasmc-options }} --enable-ext
+        cd pkg && npm install --unsafe-perm ${GITHUB_WORKSPACE} && cd ..
+        . $HOME/.wasmedge/env && node node/app.js
         rustwasmc clean
       working-directory: wasm-learning/nodejs/json_io
 
-    - name: Test WASI ${{ matrix.wasmedge-options }}
+    - name: Test WASI ${{ matrix.rustwasmc-options }}
       run: |
-        rustwasmc build ${{ matrix.wasmedge-options }} --enable-ext
-        cd pkg && sudo npm i ${GITHUB_WORKSPACE} && cd ..
-        node node/app.js
+        rustwasmc build ${{ matrix.rustwasmc-options }} --enable-ext
+        cd pkg && npm install --unsafe-perm ${GITHUB_WORKSPACE} && cd ..
+        . $HOME/.wasmedge/env && node node/app.js
         rustwasmc clean
       working-directory: wasm-learning/nodejs/wasi
 
-    - name: Test KMeans ${{ matrix.wasmedge-options }}
-      if: ${{ contains(matrix.wasmedge-options, 'aot') }}
+    - name: Test KMeans ${{ matrix.rustwasmc-options }}
+      if: ${{ contains(matrix.rustwasmc-options, 'aot') }}
       run: |
-        rustwasmc build ${{ matrix.wasmedge-options }} --enable-ext
-        cd pkg && sudo npm i ${GITHUB_WORKSPACE} && cd ..
-        cd node && node app.js && cd ..
+        rustwasmc build ${{ matrix.rustwasmc-options }} --enable-ext
+        cd pkg && npm install --unsafe-perm ${GITHUB_WORKSPACE} && cd ..
+        cd node
+        . $HOME/.wasmedge/env && node app.js
+        cd -
         rustwasmc clean
       working-directory: wasm-learning/nodejs/kmeans
 
-    - name: Test MobileNet ${{ matrix.wasmedge-options }}
-      if: ${{ contains(matrix.wasmedge-options, 'aot') }}
+    - name: Test MobileNet ${{ matrix.rustwasmc-options }}
+      if: ${{ contains(matrix.rustwasmc-options, 'aot') }}
       run: |
-        rustwasmc build ${{ matrix.wasmedge-options }} --enable-ext
-        cd pkg && sudo npm i ${GITHUB_WORKSPACE} && cd ..
-        cd test && node test.js && cd ..
+        rustwasmc build ${{ matrix.rustwasmc-options }} --enable-ext
+        cd pkg && npm install --unsafe-perm ${GITHUB_WORKSPACE} && cd ..
+        cd test
+        . $HOME/.wasmedge/env && node test.js
+        cd -
         rustwasmc clean
       working-directory: wasm-learning/faas/mobilenet
 
-    - name: Test MTCNN ${{ matrix.wasmedge-options }}
-      if: ${{ contains(matrix.wasmedge-options, 'aot') }}
+    - name: Test MTCNN ${{ matrix.rustwasmc-options }}
+      if: ${{ contains(matrix.rustwasmc-options, 'aot') }}
       run: |
-        rustwasmc build ${{ matrix.wasmedge-options }} --enable-ext
-        cd pkg && sudo npm i ${GITHUB_WORKSPACE} && cd ..
-        cd test && node test.js && cd ..
+        rustwasmc build ${{ matrix.rustwasmc-options }} --enable-ext
+        cd pkg && npm install --unsafe-perm ${GITHUB_WORKSPACE} && cd ..
+        cd test
+        . $HOME/.wasmedge/env && node test.js
+        cd -
         rustwasmc clean
       working-directory: wasm-learning/faas/mtcnn

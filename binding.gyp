@@ -14,8 +14,6 @@
               "$(HOME)/.wasmedge/lib/libtensorflow.so",
               "$(HOME)/.wasmedge/lib/libtensorflow_framework.so",
               "$(HOME)/.wasmedge/lib/libtensorflowlite_c.so",
-              "$(HOME)/.wasmedge/lib/libjpeg.so",
-              "$(HOME)/.wasmedge/lib/libpng.so",
           ]
       },
       "sources": [

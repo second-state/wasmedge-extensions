@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+set -e
+
 ARCH=$(node -e 'console.log(process.arch)')
 MODULE_NAME=wasmedge-extensions
 npm run release
