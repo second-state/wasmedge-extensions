@@ -23,8 +23,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      with:
-        submodules: recursive
 
     - name: Checkout wasm-learning
       uses: actions/checkout@v2
@@ -47,6 +45,7 @@ jobs:
     - name: Install dependencies
       run: |
         npm install --unsafe-perm -g rustwasmc
+        chmod a+w /github/home/.profile
 
     - name: Build and install wasmedge-extensions
       uses: './.github/actions/build-from-source'

@@ -50,6 +50,8 @@ jobs:
     - name: Install dependencies
       run: |
         npm install --unsafe-perm -g rustwasmc
+        chmod a+w /github/home/.npm
+        chmod a+w /github/home/.profile
 
     - name: Build and install wasmedge-extensions from GitHub
       run: |
