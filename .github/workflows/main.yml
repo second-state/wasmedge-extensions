@@ -27,8 +27,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      with:
-        submodules: recursive
 
     - name: Install clang
       if: ${{ contains(matrix.cc, 'clang') }}
